@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bill.todolist.data.Todo
 import com.bill.todolist.databinding.TodoItemBinding
 
 class TodoAdapter(private val list: List<Todo>) : RecyclerView.Adapter<TodoAdapter.TodoHolder>() {
@@ -21,7 +22,6 @@ class TodoAdapter(private val list: List<Todo>) : RecyclerView.Adapter<TodoAdapt
       textView.text = list[position].item
       checkBox.isChecked = list[position].isChecked
     }
-
   }
 
   override fun getItemCount(): Int {

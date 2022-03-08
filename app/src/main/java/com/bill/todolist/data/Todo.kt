@@ -1,4 +1,4 @@
-package com.bill.todolist
+package com.bill.todolist.data
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

@@ -1,40 +1,40 @@
 package com.bill.todolist
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.TextUtils
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.room.Room
+import com.bill.todolist.data.Todo
+import com.bill.todolist.data.TodoViewModel
 import com.bill.todolist.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
   private lateinit var binding: ActivityMainBinding
+  private lateinit var viewModel: TodoViewModel
 
   override fun onCreate(savedInstanceState: Bundle?) {
     binding = ActivityMainBinding.inflate(layoutInflater)
     super.onCreate(savedInstanceState)
     setContentView(binding.root)
 
-//    val todoItems = mutableListOf(
-//      Todo("Homework"),
-//      Todo("Create todo app", true),
-//      Todo("Learnt about recyclerviews", true)
-//    )
+    viewModel = ViewModelProvider(this).get(TodoViewModel::class.java)
 
-    val db = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "database-name").build()
-    val todoDao = db.todoDao()
-    todoDao.insert(Todo("Create todo app", true))
-    val todoItems = todoDao.getAll()
-
+    //RecyclerView Configuration
     binding.rvTodos.layoutManager = LinearLayoutManager(this)
-    val adapter = TodoAdapter(todoItems)
-    binding.rvTodos.adapter = adapter
+
+    viewModel.readAllData.observe(this) {
+      binding.rvTodos.adapter = TodoAdapter(it)
+    }
 
     binding.btnSave.setOnClickListener {
-      val newTodo: String = binding.etNewTodo.text.toString()
-//      todoItems.add(Todo(newTodo))
-      todoDao.insert(Todo(newTodo))
-      adapter.notifyItemInserted(todoItems.size - 1)
-      binding.etNewTodo.text.clear()
+      val todoString: String = binding.etNewTodo.text.toString()
+
+      if (!TextUtils.isEmpty(todoString)) {
+        val todo = Todo(todoString)
+        viewModel.addTodo(todo)
+        binding.etNewTodo.text.clear()
+      }
     }
   }
 }
