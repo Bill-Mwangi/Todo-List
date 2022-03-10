@@ -12,6 +12,7 @@ import com.bill.todolist.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
   private lateinit var binding: ActivityMainBinding
   private lateinit var viewModel: TodoViewModel
+  private lateinit var todoAdapter: TodoAdapter
 
   override fun onCreate(savedInstanceState: Bundle?) {
     binding = ActivityMainBinding.inflate(layoutInflater)
@@ -22,9 +23,11 @@ class MainActivity : AppCompatActivity() {
 
     //RecyclerView Configuration
     binding.rvTodos.layoutManager = LinearLayoutManager(this)
+    todoAdapter = TodoAdapter()
+    binding.rvTodos.adapter = todoAdapter
 
     viewModel.readAllData.observe(this) {
-      binding.rvTodos.adapter = TodoAdapter(it)
+      todoAdapter.changeData(it)
     }
 
     binding.btnSave.setOnClickListener {

@@ -7,8 +7,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bill.todolist.data.Todo
 import com.bill.todolist.databinding.TodoItemBinding
 
-class TodoAdapter(private val list: List<Todo>) : RecyclerView.Adapter<TodoAdapter.TodoHolder>() {
+class TodoAdapter(private var list: List<Todo>) : RecyclerView.Adapter<TodoAdapter.TodoHolder>() {
   private lateinit var binding: TodoItemBinding
+
+  constructor(): this(emptyList<Todo>())
 
   inner class TodoHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
@@ -26,5 +28,10 @@ class TodoAdapter(private val list: List<Todo>) : RecyclerView.Adapter<TodoAdapt
 
   override fun getItemCount(): Int {
     return list.size
+  }
+
+  fun changeData(newList: List<Todo>) {
+    list = newList
+    notifyDataSetChanged()
   }
 }
